@@ -29,7 +29,7 @@ fun Float.scaleFactor() : Float = Math.floor(this / scDiv).toFloat()
 
 fun Float.mirrorValue(a : Int, b : Int) : Float = (1 - scaleFactor()) * a.getInverse() + scaleFactor() * b.getInverse()
 
-fun Float.updateScale(dir : Int, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap
+fun Float.updateScale(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap
 
 fun Canvas.drawBLSNode(i : Int, scale : Float, paint : Paint) {
     val w : Float = width.toFloat()
@@ -71,5 +71,25 @@ class BoxedLineStepView(ctx : Context) : View(ctx) {
             }
         }
         return true
+    }
+
+    data class State(var scale : Float = 0f, var dir : Float = 0f, var prevScale : Float = 0f) {
+
+        fun update(cb : (Float) -> Unit) {
+            scale += scale.updateScale(dir, lines, 1)
+            if (Math.abs(scale - prevScale) > 1) {
+                scale = prevScale + dir
+                dir = 0f
+                prevScale = scale
+                cb(prevScale)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            if (dir == 0f) {
+                dir = 1f - 2 * prevScale
+                cb()
+            }
+        }
     }
 }
