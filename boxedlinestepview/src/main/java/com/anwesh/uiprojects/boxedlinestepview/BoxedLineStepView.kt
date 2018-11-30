@@ -213,4 +213,12 @@ class BoxedLineStepView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+        fun create(activity: Activity) : BoxedLineStepView {
+            val view : BoxedLineStepView = BoxedLineStepView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
