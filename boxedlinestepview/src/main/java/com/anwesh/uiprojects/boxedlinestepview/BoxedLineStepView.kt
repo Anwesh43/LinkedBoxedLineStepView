@@ -49,7 +49,7 @@ fun Canvas.drawBLSNode(i : Int, scale : Float, paint : Paint) {
     for (j in 0..(lines - 1)) {
         val sc : Float = sc1.divideScale(j, lines)
         save()
-        translate(mGap * j,0f)
+        translate(-size + mGap * j,0f)
         drawLine(0f, 0f, 0f, size * sc, paint)
         restore()
     }
@@ -184,6 +184,7 @@ class BoxedLineStepView(ctx : Context) : View(ctx) {
                 curr = curr.getNext(dir) {
                     dir *= -1
                 }
+                cb(i, scl)
             }
         }
 
@@ -200,6 +201,7 @@ class BoxedLineStepView(ctx : Context) : View(ctx) {
 
         fun render(canvas : Canvas, paint : Paint) {
             canvas.drawColor(Color.parseColor("#BDBDBD"))
+            bls.draw(canvas, paint)
             animator.animate {
                 bls.update {i, scl ->
                     animator.stop()
