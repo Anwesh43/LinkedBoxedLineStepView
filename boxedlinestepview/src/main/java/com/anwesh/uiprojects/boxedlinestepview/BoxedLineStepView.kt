@@ -31,6 +31,31 @@ fun Float.mirrorValue(a : Int, b : Int) : Float = (1 - scaleFactor()) * a.getInv
 
 fun Float.updateScale(dir : Int, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap
 
+fun Canvas.drawBLSNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = w / (nodes + 1)
+    val size : Float = gap / sizeFactor
+    val sc1 : Float = scale.divideScale(0, 2)
+    val sc2 : Float = scale.divideScale(1, 2)
+    val mGap : Float = size / (lines - 1)
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    paint.color = color
+    paint.strokeCap = Paint.Cap.ROUND
+    save()
+    translate(gap * (i + 1), h/2)
+    rotate(90f * sc2)
+    drawRect(RectF(-size, -size, size, 0f), paint)
+    for (j in 0..(lines - 1)) {
+        val sc : Float = sc1.divideScale(j, lines)
+        save()
+        translate(mGap * j,0f)
+        drawLine(0f, 0f, 0f, size * sc, paint)
+        restore()
+    }
+    restore()
+}
+
 class BoxedLineStepView(ctx : Context) : View(ctx) {
 
     private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
