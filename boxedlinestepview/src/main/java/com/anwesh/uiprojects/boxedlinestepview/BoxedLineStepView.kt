@@ -38,7 +38,7 @@ fun Canvas.drawBLSNode(i : Int, scale : Float, paint : Paint) {
     val size : Float = gap / sizeFactor
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
-    val mGap : Float = size / (lines - 1)
+    val mGap : Float = (2 * size - paint.strokeWidth) / (lines - 1)
     paint.strokeWidth = Math.min(w, h) / strokeFactor
     paint.color = color
     paint.strokeCap = Paint.Cap.ROUND
@@ -49,7 +49,7 @@ fun Canvas.drawBLSNode(i : Int, scale : Float, paint : Paint) {
     for (j in 0..(lines - 1)) {
         val sc : Float = sc1.divideScale(j, lines)
         save()
-        translate(-size + mGap * j,0f)
+        translate(-size + paint.strokeWidth + mGap * j,0f)
         drawLine(0f, 0f, 0f, size * sc, paint)
         restore()
     }
